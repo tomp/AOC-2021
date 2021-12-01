@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
-#  Advent of Code 2020 - Day N
+#  Advent of Code 2021 - Day N
 #
+from typing import Sequence
 from pathlib import Path
 
 INPUTFILE = "input.txt"
@@ -14,28 +15,30 @@ SAMPLE_CASES = [
     (arg2, expected2),
 ]
 
+Lines = Sequence[str]
+Sections = Sequence[Lines]
 
 # Utility functions
 
 ## Use these if blank lines should be discarded.
-def sample_input():
+def sample_input() -> Lines:
     return filter_blank_lines(SAMPLE_INPUT.split("\n"))
 
-def load_input(infile):
+def load_input(infile: str) -> Lines:
     return filter_blank_lines(Path(infile).open())
 
-def filter_blank_lines(lines):
+def filter_blank_lines(lines: Lines) -> Lines:
     return [line.strip() for line in lines if line.strip()]
 
 
 ## Use these if blank lines in input are meaningful.
-def sample_input():
+def sample_input() -> Lines:
     return SAMPLE_INPUT.strip("\n").split("\n")
 
-def load_input(infile):
+def load_input(infile: str) -> Lines:
     return [line.strip() for line in Path(infile).open()]
 
-def parse_sections(lines):
+def parse_sections(lines: Lines) -> Sections:
     result = []
     sect = []
     for line in lines:
@@ -53,7 +56,7 @@ def parse_sections(lines):
 
 # Solution
 
-def solve(lines):
+def solve(lines: Lines) -> Any:
     """Solve the problem."""
     pass
 
@@ -62,7 +65,7 @@ def solve(lines):
 
 #!! DELETE THE example1 FUNCTION YOU'RE NOT GOING TO USE
 
-def example1():
+def example1() -> None:
     """Run example for problem with input arguments."""
     print("EXAMPLE 1:")
     for arg, expected in SAMPLE_CASES:
@@ -71,8 +74,7 @@ def example1():
         assert result == expected
     print("= " * 32)
 
-
-def example1():
+def example1() -> None:
     """Run example for problem with input lines."""
     print("EXAMPLE 1:")
     lines = filter_blank_lines(SAMPLE_INPUT.split("\n"))
@@ -82,8 +84,7 @@ def example1():
     assert result == expected
     print("= " * 32)
 
-
-def part1(lines):
+def part1(lines: Lines) -> None:
     print("PART 1:")
     result = solve(lines)
     print(f"result is {result}")
@@ -93,10 +94,9 @@ def part1(lines):
 # PART 2
 
 
-
 if __name__ == "__main__":
     example1()
-    lines = load_input(INPUTFILE)
-    part1(lines)
-    example2()
-    part2(lines)
+    input_lines = load_input(INPUTFILE)
+    part1(input_lines)
+    # example2()
+    # part2(input_lines)
