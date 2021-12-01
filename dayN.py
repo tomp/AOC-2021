@@ -2,7 +2,7 @@
 #
 #  Advent of Code 2021 - Day N
 #
-from typing import Sequence
+from typing import Sequence, Any
 from pathlib import Path
 
 INPUTFILE = "input.txt"
@@ -77,7 +77,7 @@ def example1() -> None:
 def example1() -> None:
     """Run example for problem with input lines."""
     print("EXAMPLE 1:")
-    lines = filter_blank_lines(SAMPLE_INPUT.split("\n"))
+    lines = sample_input()
     result = solve(lines)
     expected = 0
     print(f"'sample-input' -> {result} (expected {expected})")
