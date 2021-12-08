@@ -141,7 +141,7 @@ def solve2(lines: Lines) -> int:
     # print(f"{len(bingo)} bingos after {i} calls")
     # print(bingo)
 
-    score = sum(list(board_values[board_num] - called))
+    score = sum(board_values[board_num] - called)
     return score * last_call
     
 
@@ -183,7 +183,7 @@ def solve(lines: Lines) -> int:
     # print(f"{len(bingo)} bingos after {i} calls")
     # print(bingo)
 
-    score = sum(list(board_values[board_num] - called))
+    score = sum(board_values[board_num] - called)
 
     return score * last_call
     
