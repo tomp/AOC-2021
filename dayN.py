@@ -63,6 +63,10 @@ def parse_sections(lines: Lines) -> Sections:
 
 # Solution
 
+def solve2(lines: Lines) -> int:
+    """Solve the problem."""
+    return 0
+
 def solve(lines: Lines) -> int:
     """Solve the problem."""
     return 0
@@ -88,6 +92,22 @@ def part1(lines: Lines) -> None:
 
 
 # PART 2
+
+def example2() -> None:
+    """Run example for problem with input arguments."""
+    print("EXAMPLE 2:")
+    for text, expected in SAMPLE_CASES2:
+        lines = load_text(text)
+        result = solve2(lines)
+        print(f"'{text}' -> {result} (expected {expected})")
+        assert result == expected
+    print("= " * 32)
+
+def part2(lines: Lines) -> None:
+    print("PART 2:")
+    result = solve2(lines)
+    print(f"result is {result}")
+    print("= " * 32)
 
 
 if __name__ == "__main__":
