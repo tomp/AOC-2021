@@ -2,7 +2,7 @@
 #
 #  Advent of Code 2019 - Day N
 #
-from typing import Sequence, Any
+from typing import Sequence, Union, Optional, Any
 from pathlib import Path
 from collections import defaultdict
 from dataclasses import dataclass
@@ -15,7 +15,7 @@ SAMPLE_CASES = [
     (
         """
         """,
-        expected
+        0
     ),
 ]
 
