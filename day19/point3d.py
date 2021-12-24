@@ -62,6 +62,13 @@ class Delta3D:
     def __abs__(self) -> float:
         return math.sqrt(self.dx*self.dx + self.dy*self.dy + self.dz* self.dz)
 
+    def __lt__(self, other: "Delta3D") -> bool:
+        if self.dx != other.dx:
+            return self.dx < other.dx
+        if self.dy != other.dy:
+            return self.dy < other.dy
+        return self.dz < other.dz
+
 ZeroOne = int # -1, 0 or 1
 Int3 = list[ZeroOne, ZeroOne, ZeroOne]
 
@@ -72,6 +79,12 @@ class Rot3D:
     def __post_init__(self):
         assert len(self.m) == 3
         assert all([len(row) == 3 for row in self.m])
+
+    def __str__(self) -> str:
+        rows = []
+        for row in self.m:
+            rows.append(", ".join([f"{v:2d}" for v in row]))
+        return "\n".join(rows)
 
     def __mul__(self, v: Union[Point3D, Delta3D]) -> Union[Point3D, Delta3D]:
         if isinstance(v, Point3D):
@@ -92,133 +105,6 @@ for i, j, k in permutations((0, 1, 2)):
         matrix[0][i] = ri
         matrix[1][j] = rj
         matrix[2][k] = rk
-        print(f"{len(ROTS):2d}: {str(matrix)}")
+        # print(f"{len(ROTS):2d}: {str(matrix)}")
         ROTS.append(Rot3D(matrix))
 
-"""
-ROTS = [
-    Rot3D((
-        (1, 0, 0),
-        (0, 1, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (1, 0, 0),
-        (0, 0, 1),
-        (0, 1, 0)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (1, 0, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (0, 0, 1),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (0, 1, 0),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (1, 0, 0),
-        (0, 1, 0)
-    )),
-
-    Rot3D((
-        (-1, 0, 0),
-        (0, 1, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (-1, 0, 0),
-        (0, 0, 1),
-        (0, 1, 0)
-    )),
-    Rot3D((
-        (0, -1, 0),
-        (1, 0, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (0, -1, 0),
-        (0, 0, 1),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, -1),
-        (0, 1, 0),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, -1),
-        (1, 0, 0),
-        (0, 1, 0)
-    )),
-
-    Rot3D((
-        (1, 0, 0),
-        (0, -1, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (1, 0, 0),
-        (0, 0, -1),
-        (0, 1, 0)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (-1, 0, 0),
-        (0, 0, 1)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (0, 0, -1),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (0, -1, 0),
-        (1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (-1, 0, 0),
-        (0, 1, 0)
-    )),
-
-    Rot3D((
-        (1, 0, 0),
-        (0, 1, 0),
-        (0, 0, -1)
-    )),
-    Rot3D((
-        (1, 0, 0),
-        (0, 0, 1),
-        (0, -1, 0)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (1, 0, 0),
-        (0, 0, -1)
-    )),
-    Rot3D((
-        (0, 1, 0),
-        (0, 0, 1),
-        (-1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (0, 1, 0),
-        (-1, 0, 0)
-    )),
-    Rot3D((
-        (0, 0, 1),
-        (1, 0, 0),
-        (0, -1, 0)
-    )),
-]
-"""
