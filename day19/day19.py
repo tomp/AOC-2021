@@ -5,10 +5,10 @@
 from typing import Sequence, Union, Optional, Any
 from pathlib import Path
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import math
 import re
-from point3d import Point3D, Delta3D
+from point3d import Point3D, Delta3D, Rot3D, ROTS
 
 INPUTFILE = "input.txt"
 
@@ -269,26 +269,64 @@ def parse_sections(lines: Lines) -> Sections:
 
 # Solution
 
+ClusterKey = tuple[int, int, int] # sorted integer distances
+ClusterIds = tuple[int, int, int] # sorted beacon IDs
+ClusterMap = dict[ClusterKey, ClusterIds]
+
+ClusterCoords = tuple[Point3D, Point3D, Point3D] # unsorted beacon coordinates
+
+
 @dataclass
 class Scanner:
     name: str
     beacons: list[Point3D]
+    location: Point3D = field(default=Point3D(0, 0, 0))
+    rotation: Rot3D = field(default=ROTS[0])
+    _clusters: Optional[ClusterMap] = None
 
-    def distances(self, count=5):
+    def align(self, cluster: ClusterKey, target: ClusterCoords) -> None:
+        p1, p2, p3 = [self.beacons[k] for k in self.clusters[cluster]]
+        d12 = int(p1.distance(p2))
+        d13 = int(p1.distance(p3))
+        d23 = int(p2.distance(p3))
+        t1, t2, t3 = target
+        t12 = int(t1.distance(t2))
+        t13 = int(t1.distance(t3))
+        t23 = int(t2.distance(t3))
+
+
+    def clusters(self) -> ClusterMap:
+        if not self._clusters:
+            self._clusters = {}
+            dists = self._distances(2)
+            for i, inaybs in dists.items():
+                if len(inaybs) < 2:
+                    continue
+                (dij, j), (dik, k) = inaybs
+                assert len(dists[j]) == len(dists[k]) == 2
+                djk = int(self.beacons[j].distance(self.beacons[k]))
+                sig = tuple(sorted([dij, djk, dik]))
+                ids = tuple(sorted([i, j, k]))
+                # print(f"{sig} -> {ids}")
+                self._clusters[sig] = ids
+        return self._clusters
+
+    def _distances(self, count=5):
         dists = defaultdict(list)
         n = len(self.beacons)
         for i in range(1, n):
             p1 = self.beacons[i]
             for j in range(i):
                 p2 = self.beacons[j]
-                d = p1.distance(p2)
+                d = int(p1.distance(p2))
                 if d > 0:
-                    dists[p1].append(d)
-                    dists[p2].append(d)
-        for p in sorted(dists):
-            dists[p].sort()
-            dists[p] = [d for d in dists[p][:count] if d < 800]
-            print(f"{p}:   " + ", ".join([f"{v:5.2f}" for v in dists[p]]))
+                    dists[i].append((d, j))
+                    dists[j].append((d, i))
+        for i in sorted(dists, key=lambda k: self.beacons[k]):
+            dists[i].sort()
+            dists[i] = [(d, j) for d, j in dists[i][:count] if d < 600]
+            # print(f"{i}, {self.beacons[i]}:   " + 
+            #        ", ".join([f"{d} ({j})" for d, j in dists[i]]))
         return dists
 
 
